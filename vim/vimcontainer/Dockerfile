@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM phusion:0.9.19
 
 MAINTAINER enthudave
 
@@ -31,18 +31,12 @@ ENV LC_ALL en_US.UTF-8
 RUN chown -R dev:dev $HOME
 USER dev
 
-ADD vimrcommented /home/dev/.vimrc
-ADD vimaddition /home/dev/vimaddition
-ADD .ycm_extra_conf.py /home/dev/.ycm_extra_conf.py
-
 RUN git clone https://github.com/VundleVim/Vundle.vim.git /home/dev/.vim/bundle/Vundle.vim && \ 
     git clone https://github.com/powerline/fonts /home/dev/fonts && \
     /home/dev/fonts/install.sh && \
     vim +PluginInstall +qall && \ 
     rm $HOME/.vimrc
 
-ADD vimrc /home/dev/.vimrc
-
-RUN /home/dev/.vim/bundle/YouCompleteMe/install.py --clang-completer
+RUN /home/dev/.vim/bundle/YouCompleteMe/install.py
 
 CMD ["/bin/bash"]
