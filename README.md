@@ -1,6 +1,6 @@
 # dockerfiles
 
-These images have to be run with '$  /sbin/my_init -- su - dev'
+These images have to be run with ' /sbin/my_init -- su - dev' as the command
 
 For example:
 
