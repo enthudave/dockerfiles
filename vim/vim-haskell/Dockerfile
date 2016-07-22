@@ -1,4 +1,6 @@
-FROM ubuntu:latest
+FROM phusion/baseimage:0.9.19
+ENV DEBIAN_FRONTEND noninteractive
+ENV HOME /root
 
 MAINTAINER enthudave
 
@@ -36,9 +38,15 @@ ENV LC_ALL en_US.UTF-8
 RUN chown -R dev:dev $HOME
 USER dev
 
-ADD vimplugins /home/dev/.vimrc
-ADD ycm_extra_conf.py /home/dev/.ycm_extra_conf.py
+# Install dotfiles
+RUN git clone https://github.com/enthudave/dotfiles /home/dev/dotfiles && \
+    cp /home/dev/dotfiles/linux/vim/vimplugins /home/dev/.vimrc && \
+#    cp /home/dev/dotfiles/linux/zsh/zshrc /home/dev/.zshrc && \
+#    cp /home/dev/dotfiles/linux/zsh/zshenv /home/dev/.zshenv && \
+    cp /home/dev/dotfiles/linux/tmux/tmux.conf /home/dev/.tmux.conf
 
+
+# Install Vim-Plugins
 RUN git clone https://github.com/VundleVim/Vundle.vim.git /home/dev/.vim/bundle/Vundle.vim && \
     git clone https://github.com/powerline/fonts /home/dev/fonts && \
     /home/dev/fonts/install.sh && \
@@ -48,11 +56,6 @@ RUN git clone https://github.com/VundleVim/Vundle.vim.git /home/dev/.vim/bundle/
 # compiled vimplugins
 RUN cd /home/dev/.vim/bundle/vimproc.vim && make
 RUN /home/dev/.vim/bundle/YouCompleteMe/install.py
-
-ADD vimrc /home/dev/.vimrc
-ADD tmux.conf /home/dev/.tmux.conf
-ADD zshrc /home/dev/.zshrc
-ADD zshenv /home/dev/zshenv
 
 ENV PATH $HOME/.local/bin:/home/dev/.cabal/bin:$PATH
 
